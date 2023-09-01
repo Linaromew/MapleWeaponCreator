@@ -828,15 +828,13 @@ namespace MapleWeaponGen
 
         private static bool HasAlphaNeighbour(Image<Rgba32> image, int x, int y)
         {
-            Rgba32 alpha = Color.Transparent;
-
-            if (x > 0 && image[x - 1, y] == alpha)
+            if (x > 0 && image[x - 1, y].A == 0)
                 return true;
-            if (x < image.Width - 1 && image[x + 1, y] == alpha)
+            if (x < image.Width - 1 && image[x + 1, y].A == 0)
                 return true;
-            if (y > 0 && image[x, y - 1] == alpha)
+            if (y > 0 && image[x, y - 1].A == 0)
                 return true;
-            if (y < image.Height - 1 && image[x, y + 1] == alpha)
+            if (y < image.Height - 1 && image[x, y + 1].A == 0)
                 return true;
 
             return false;
