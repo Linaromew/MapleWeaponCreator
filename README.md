@@ -4,8 +4,6 @@ Tool which allows anyone to create entirely new weapons with a single drawn fram
  
 Included are reference frames for generating 1H/2H/Spear+Polearm weapons, so users can just draw over the outline with a custom weapon, or use it as a guideline for expected sizing.
 
-To Do: Licensing for referenced executables
-
 Fallback Uses:
 
 rotsprite 1.0
