@@ -60,36 +60,5 @@ namespace MapleWeaponGen
 
             return scaled;
         }
-
-        //public static void Rotate(ref Image<Rgba32> src, ref Image<Rgba32> dst, int angle)
-        //{
-        //    int width = src.Width;
-        //    int height = src.Height;
-
-        //    /* Center points for rotation */
-        //    int centerX = width / 2;
-        //    int centerY = height / 2;
-
-        //    double rad = angle * Math.PI / 180.0;
-        //    double cos = Math.Cos(rad);
-        //    double sin = Math.Sin(rad);
-
-        //    for (int y = 0; y < height; ++y)
-        //    {
-        //        for (int x = 0; x < width; ++x)
-        //        {
-        //            int dstX = x - centerX;
-        //            int dstY = y - centerY;
-
-        //            int srcX = (int)Math.Round(centerX + dstX * cos + dstY * sin);
-        //            int srcY = (int)Math.Round(centerY - dstX * sin + dstY * cos);
-
-        //            if (srcX >= 0 && srcY >= 0 && srcX < width && srcY < height)
-        //            {
-        //                dst[x, y] = src[srcX, srcY];
-        //            }
-        //        }
-        //    }
-        //}
     }
 }
