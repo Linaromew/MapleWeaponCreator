@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
+using SixLabors.ImageSharp.Formats.Tiff.Compression.Decompressors;
 
 namespace MapleWeaponGen
 {
@@ -103,6 +104,16 @@ namespace MapleWeaponGen
                 File.Copy("weaponPA.img.xml", GetOutputPath("weapon.img.xml"));
             }
 
+            else if (selectedWeapon == weaponType.WEAPON_CROSSBOW)
+            {
+                File.Copy("weaponCrossbow.img.xml", GetOutputPath("weapon.img.xml"));
+            }
+
+            else if (selectedWeapon == weaponType.WEAPON_BOW)
+            {
+                File.Copy("weaponBow.img.xml", GetOutputPath("weapon.img.xml"));
+            }
+
             Directory.SetCurrentDirectory(GetOutputPath(""));
             XMLHandling.SetupWeaponXML("weapon.img.xml");
             Directory.SetCurrentDirectory("..");
@@ -110,31 +121,36 @@ namespace MapleWeaponGen
 
         private static void GenerateWeaponTypeFrames()
         {
-            var noRemove = new List<int> { };
-            if (selectedWeapon == weaponType.WEAPON_1H)
+            switch (selectedWeapon)
             {
-                noRemove = new List<int> { 0, 3, 9, 15, 21, 27, 30, 39, 51, 69 };
+                case weaponType.WEAPON_1H:
+                    VanillaFrameHandler.Do1HFrames();
+                break;
+
+                case weaponType.WEAPON_2H:
+                    VanillaFrameHandler.Do2HFrames();
+                break;
+
+                case weaponType.WEAPON_POLEARM:
+                    VanillaFrameHandler.DoPAFrames();
+                break;
+
+                case weaponType.WEAPON_CROSSBOW:
+                    VanillaFrameHandler.DoCrossbowFrames();
+                break;
+
+                case weaponType.WEAPON_BOW:
+                    VanillaFrameHandler.DoBowFrames();
+                break;
             }
 
-            else if (selectedWeapon == weaponType.WEAPON_2H)
-            {
-                noRemove = new List<int> { 0, 9, 15, 18, 21, 27, 33, 69 };
-            }
-
-            else if (selectedWeapon == weaponType.WEAPON_POLEARM)
-            {
-                noRemove = new List<int> { 0, 3, 9, 15, 21, 26, 27, 28, 33, 63, 69 };
-            }
-
-            for (var i = 0; i < 120; i++)
-            {
-                if (noRemove.Contains(i)) continue;
-
-                if (File.Exists(GetOutputPath($"{i}.png")))
-                {
-                    File.Delete(GetOutputPath($"{i}.png"));
-                }
-            }
+            //for (var i = 0; i < 120; i++)
+            //{
+            //    if (File.Exists(GetOutputPath($"{i}.png")))
+            //    {
+            //        File.Delete(GetOutputPath($"{i}.png"));
+            //    }
+            //}
 
             /* Generate rotations */
             var explorer = new Process
@@ -146,35 +162,10 @@ namespace MapleWeaponGen
                 }
             };
             explorer.Start();
-
-            System.Windows.MessageBox.Show("Please make any manual edit to the produced images now.\r\n\r\nPress OK to finish building the weapon XML data.");
-
-            if (selectedWeapon == weaponType.WEAPON_1H)
-            {
-                Do1HFrames();
-            }
-
-            else if (selectedWeapon == weaponType.WEAPON_2H)
-            {
-                Do2HFrames();
-            }
-
-            else if (selectedWeapon == weaponType.WEAPON_POLEARM)
-            {
-                DoPAFrames();
-            }
-
-            for (var i = 0; i < 120; i++)
-            {
-                if (File.Exists(GetOutputPath($"{i}.png")))
-                {
-                    File.Delete(GetOutputPath($"{i}.png"));
-                }
-            }
         }
 
         // In case rotationAngles is increased, this provides an easy way to adjust all old frames
-        private static int GetFrameNumber(int input)
+        public static int GetFrameNumber(int input)
         {
             return input * (rotationAngles / 72);
         }
@@ -195,580 +186,7 @@ namespace MapleWeaponGen
             }
         }
 
-        #region 1H
-        private static void Do1HFrames()
-        {
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{ GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(19, 23, 92, 81)));
 
-                var horiFrames = new List<string> { "proneStab.0.weapon.png", "proneStab.1.weapon.png", "stabO1.0.weapon.png", "stabO1.1.weapon.png", "stabO2.0.weapon.png", "stabO2.1.weapon.png", "stabOF.0.weapon.png", "stabOF.1.weapon.png", "stabOF.2.weapon.png", "walk1.0.weapon.png", "walk1.2.weapon.png", "swingO3.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{ GetFrameNumber(9)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(21, 21, 86, 86))
-                .Flip(FlipMode.Horizontal));
-
-                var horiFrames = new List<string> { "swingO1.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{ GetFrameNumber(18)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(26, 24, 79, 94)));
-
-                var horiFrames = new List<string> { "shoot1.0.weapon.png", "shoot1.1.weapon.png", "shootF.0.weapon.png", "shootF.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(17, 24, 93, 81))
-                .Flip(FlipMode.Horizontal));
-
-                var horiFrames = new List<string> { "swingO1.0.weapon.png", "swingO3.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(69)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(17, 27, 93, 80)));
-
-                var horiFrames = new List<string> { "stand1.0.weapon.png", "walk1.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(21)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(28, 18, 80, 93)));
-
-                var horiFrames = new List<string> { "fly.0.weapon.png", "jump.0.weapon.png", "swingO2.1.weapon.png", "swingOF.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(15)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(32, 19, 73, 90))
-                .Flip(FlipMode.Horizontal));
-
-                var horiFrames = new List<string> { "swingO3.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(23, 21, 86, 86)));
-
-                var horiFrames = new List<string> { "swingO2.0.weapon.png", "swingOF.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(3)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 21, 93, 80)));
-
-                var horiFrames = new List<string> { "alert.0.weapon.png", "alert.1.weapon.png", "alert.2.weapon.png", "walk1.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(51)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(27, 18, 80, 93)));
-
-                var horiFrames = new List<string> { "swingO2.2.weapon.png", "swingOF.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(39)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 28, 93, 80)));
-
-                var horiFrames = new List<string> { "swingO1.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(30)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(19, 23, 93, 80)));
-
-                var horiFrames = new List<string> { "swingOF.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-        }
-        #endregion 1H
-        #region 2H
-        private static void Do2HFrames()
-        {
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(10, 21, 108, 86)));
-
-                var horiFrames = new List<string> { "proneStab.0.weapon.png", "proneStab.1.weapon.png", "stabO1.0.weapon.png", "stabO1.1.weapon.png", "stabO2.0.weapon.png", "stabO2.1.weapon.png", "stabOF.0.weapon.png", "stabOF.1.weapon.png", "stabOF.2.weapon.png", };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(10, 21, 108, 86))
-                .Flip(FlipMode.Horizontal));
-
-                var horiFrames = new List<string> { "swingT3.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(9)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(11, 15, 100, 96)));
-
-                var horiFrames = new List<string> { "alert.0.weapon.png", "alert.1.weapon.png", "alert.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 13, 98, 98)));
-
-                var horiFrames = new List<string> { "fly.0.weapon.png", "jump.0.weapon.png", "stand2.0.weapon.png", "swingTF.2.weapon.png", "walk2.0.weapon.png", "walk2.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(15)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 10, 86, 108)));
-
-                var horiFrames = new List<string> { "swingT2.1.weapon.png", "swingT3.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(21)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(25, 10, 86, 108)));
-
-                var horiFrames = new List<string> { "swingT1.1.weapon.png", "swingT2.0.weapon.png", "swingTF.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(69)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(10, 25, 108, 86)));
-
-                var horiFrames = new List<string> { "swingT1.2.weapon.png", "swingT2.2.weapon.png", "swingTF.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(69)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(10, 25, 108, 86))
-                .Flip(FlipMode.Horizontal));
-
-                var horiFrames = new List<string> { "swingT3.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(18)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(21, 9, 86, 108)));
-
-                var horiFrames = new List<string> { "swingTF.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 14, 100, 96)));
-
-                var horiFrames = new List<string> { "walk2.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(19, 11, 96, 100)));
-
-                var horiFrames = new List<string> { "walk2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(33)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(11, 18, 108, 86)));
-
-                var horiFrames = new List<string> { "swingT1.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-        }
-        #endregion 2H
-        #region PA
-        private static void DoPAFrames()
-        {
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(9)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(23, 24, 88, 83)));
-
-                var horiFrames = new List<string> { "alert.0.weapon.png", "alert.1.weapon.png", "alert.2.weapon.png"};
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(22, 26, 83, 84)));
-
-                var horiFrames = new List<string> { "fly.0.weapon.png", "jump.0.weapon.png", "stand2.1.weapon.png", "swingP2.0.weapon.png", "swingT2.0.weapon.png", "walk2.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(13, 42, 111, 42)));
-
-                var horiFrames = new List<string> { "proneStab.0.weapon.png", "proneStab.1.weapon.png", "stabT1.2.weapon.png", "swingPF.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(69)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(19, 44, 106, 48)));
-
-                var horiFrames = new List<string> { "stabT1.0.weapon.png", "stabT1.1.weapon.png", "stabT2.0.weapon.png", "stabT2.1.weapon.png", "swingP1.2.weapon.png", "swingP2.2.weapon.png", "swingPF.1.weapon.png", "swingPF.3.weapon.png", "swingT2.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(3)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(15, 34, 108, 47)));
-
-                var horiFrames = new List<string> { "stabT2.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(63)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(16, 19, 91, 86)));
-
-                var horiFrames = new List<string> { "stabTF.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(33)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(4, 37, 106, 48)));
-
-                var horiFrames = new List<string> { "swingP1.0.weapon.png", "swingPF.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(21)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(48, 17, 47, 108)));
-
-                var horiFrames = new List<string> { "swingP1.1.weapon.png", "swingP2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(15)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(36, 16, 48, 106)));
-
-                var horiFrames = new List<string> { "swingT2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(26)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(23, 26, 82, 88)));
-
-                var horiFrames = new List<string> { "stand2.0.weapon.png", "walk2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(28)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 25, 83, 84)));
-
-                var horiFrames = new List<string> { "stand2.2.weapon.png", "walk2.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-        }
-        #endregion PA
-        #region Crossbow
-        private static void DoCrossbowFrames()
-        {
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(9)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(23, 24, 88, 83)));
-
-                var horiFrames = new List<string> { "alert.0.weapon.png", "alert.1.weapon.png", "alert.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(27)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(22, 26, 83, 84)));
-
-                var horiFrames = new List<string> { "fly.0.weapon.png", "jump.0.weapon.png", "stand2.1.weapon.png", "swingP2.0.weapon.png", "swingT2.0.weapon.png", "walk2.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(0)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(13, 42, 111, 42)));
-
-                var horiFrames = new List<string> { "proneStab.0.weapon.png", "proneStab.1.weapon.png", "stabT1.2.weapon.png", "swingPF.0.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(69)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(19, 44, 106, 48)));
-
-                var horiFrames = new List<string> { "stabT1.0.weapon.png", "stabT1.1.weapon.png", "stabT2.0.weapon.png", "stabT2.1.weapon.png", "swingP1.2.weapon.png", "swingP2.2.weapon.png", "swingPF.1.weapon.png", "swingPF.3.weapon.png", "swingT2.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(3)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(15, 34, 108, 47)));
-
-                var horiFrames = new List<string> { "stabT2.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(63)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(16, 19, 91, 86)));
-
-                var horiFrames = new List<string> { "stabTF.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(33)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(4, 37, 106, 48)));
-
-                var horiFrames = new List<string> { "swingP1.0.weapon.png", "swingPF.2.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(21)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(48, 17, 47, 108)));
-
-                var horiFrames = new List<string> { "swingP1.1.weapon.png", "swingP2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(15)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(36, 16, 48, 106)));
-
-                var horiFrames = new List<string> { "swingT2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(26)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(23, 26, 82, 88)));
-
-                var horiFrames = new List<string> { "stand2.0.weapon.png", "walk2.1.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-
-            using (var image = Image.Load<Rgba32>(GetOutputPath($"{GetFrameNumber(28)}.png")))
-            {
-                image.Mutate(x => x
-                .Crop(new Rectangle(18, 25, 83, 84)));
-
-                var horiFrames = new List<string> { "stand2.2.weapon.png", "walk2.3.weapon.png" };
-                foreach (var frame in horiFrames)
-                {
-                    image.Save(GetOutputPath(frame));
-                }
-            }
-        }
-        #endregion Crossbow
 
         private static void GenerateRotationSpritesheet()
         {
@@ -907,9 +325,13 @@ namespace MapleWeaponGen
             procScaleSprite4.WaitForExit();
         }
 
-        private static string GetOutputPath(string input)
+        public static string GetOutputPath(string input)
         {
-            return Path.Combine(folderName + "/" + input);
+            if (string.IsNullOrEmpty(input))
+            {
+                return Path.GetFullPath(folderName);
+            }
+            return Path.GetFullPath(Path.Combine(folderName + "/" + input));
         }
 
         private static void PrepareImageAlpha(Image<Rgba32> image)

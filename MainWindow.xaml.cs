@@ -53,7 +53,9 @@ namespace MapleWeaponGen
             if ((bool)wep1H.IsChecked) { reqWeapon = weaponType.WEAPON_1H; }
             if ((bool)wep2H.IsChecked) { reqWeapon = weaponType.WEAPON_2H; }
             if ((bool)wepPA.IsChecked) { reqWeapon = weaponType.WEAPON_POLEARM; }
-            
+            if ((bool)wepBOW.IsChecked) { reqWeapon = weaponType.WEAPON_BOW; }
+            if ((bool)wepXBOW.IsChecked) { reqWeapon = weaponType.WEAPON_CROSSBOW; }
+
             if (reqWeapon == weaponType.BAD_ENTRY)
             {
                 MessageBox.Show("Please select a valid weapon type.");

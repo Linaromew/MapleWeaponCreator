@@ -372,4 +372,15 @@
 			</canvas>
 		</imgdir>
 	</imgdir>
+	    <imgdir name="swingOF">
+        <imgdir name="3">
+            <canvas name="weapon" width="71" height="25" basedata="iVBORw0KGgoAAAANSUhEUgAAAEcAAAAZCAYAAABjNDOYAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKM+VkT1Iw0AcxV/TSlUqDlYQcchQneyiIo4likWwUNoKrTqYXPoFTRqSFBdHwbXg4Mdi1cHFWVcHV0EQ/ABxdXFSdJES/5cUWoQKHlzux7u8x907QGhUmGYFYoCm22YqLonZ3KoYfEUIfQjQd1hmlpFIL2bQdXzdw8fXuyjPwv/GgJq3GOATiWPMMG3iDeLZTdvgvE8cZiVZJT4nnjTpgMSPXFc8fuNcdFngmWEzk5onDhOLxQ5WOpiVTI14hjiiajrlC1mPVc5bnLVKjbXOyW8Yyusraa7THEMcS0ggCREKaiijAhtRWnVSLKRoX+riH3X9SXIp5CqDkWMBVWiQXT/4G/zu1ipMT3lJIQnoeXGcj3EguAs0647zfew4zRPA/wxc6W1/tQHMfZJeb2uRI2BwG7i4bmvKHnC5A4w8GbIpu5KfplAoAO9n9Ew5YOgW6F/zemvt4/QByFBXyzfAwSEwUaTs9S737u3s7c9/3P4g/QBMRXKX/5WnlQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAAd0SU1FB+cMCRAWHRzVWW8AAAEUSURBVFhH7ZLtDYMwDERZobN0ha7QWZiFFboCw1Hs5iL7CKH8TJwnnci3dE9MiS19B8T2ej5EDmews33mtwqykXVKSLS8CLK5kBUOJ+CGKEk4cnkrasg64srflBUOJ6Ami8/uCUcuXxM1ZFH5IauOK39TVjicgJosPrsnHLl8TVRFFs9LXO03gS36l6xlWXL4PkL7gOfNgQIaljXPs5Ze11UDCWexb9GaYMdNggJZjgWSbOQMJJaC92jePE5CCcjBGLFyOPLu7/n2QRlX3mLXEfxNmPcsCDhRZ0AOxogV1qsg4IqXsPsSK6x3OYKWxfcKliX39JVOsQV1bMvXSOfDkcXIGHMWlvZCwuUPwnR1oJxImaYvlr4t7ATb6joAAAAASUVORK5CYII=">
+                <vector name="origin" x="-23" y="31"/>
+                <imgdir name="map">
+                    <vector name="navel" x="40" y="-4"/>
+                </imgdir>
+                <string name="z" value="weaponBelowBody"/>
+            </canvas>
+        </imgdir>
+    </imgdir>
 </imgdir>

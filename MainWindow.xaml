@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapleWeaponGen"
         mc:Ignorable="d"
-        Title="Maple Weapon Creator" Height="400" Width="620" Background="#222222" FontFamily="Segoe Ui Dark" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
+        Title="Maple Weapon Creator" Height="500" Width="680" Background="#222222" FontFamily="Segoe Ui Dark" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
 
     <Window.Resources>
         <Style x:Key="RadioButton" TargetType="RadioButton">
@@ -55,9 +55,27 @@
             </StackPanel>
         </StackPanel>
 
-        <Separator Height="3" Width="400" Margin="0, 30, 0, 30"/>
+        <Separator Height="3" Width="400" Margin="0, 30, 0, 30" Background="#FFA0A0A0"/>
+
+        <Label HorizontalAlignment="Center" Foreground="LightGray" FontWeight="Bold">Select Animation Type</Label>
+
+        <Grid x:Name="RadioButtonTypeGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <RadioButton Grid.Row="1" Grid.Column="0" x:Name="wep1H1" Content="Pip Style" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>
+            <RadioButton Grid.Row="1" Grid.Column="1" x:Name="wep2H1" Content="Vanilla Style" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>
+        </Grid>
+
+        <Separator Height="15" Width="400" Margin="0, 30, 0, 30" Background="#FFA0A0A0"/>
 
         <Label HorizontalAlignment="Center" Foreground="LightGray" FontWeight="Bold">Select Weapon Type</Label>
+        
         <Grid x:Name="RadioButtonSecGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -74,8 +92,8 @@
             <RadioButton Grid.Row="1" Grid.Column="0" x:Name="wep1H" Content="1H Weapon/Dagger/Wand/Staff" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>
             <RadioButton Grid.Row="1" Grid.Column="1" x:Name="wep2H" Content="2H Weapon" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>
             <RadioButton Grid.Row="1" Grid.Column="2" x:Name="wepPA" Content="Polearm" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>
-            <!--<RadioButton Grid.Row="2" Grid.Column="0" x:Name="wepBOW" Content="Bow" Style="{StaticResource RadioButton}" Margin="5" ></RadioButton>-->
-            <!--<RadioButton Grid.Row="2" Grid.Column="1" x:Name="wepXBOW" Content="Crossbow" Style="{StaticResource RadioButton}" Margin="5" ></RadioButton>-->
+            <RadioButton Grid.Row="2" Grid.Column="0" x:Name="wepBOW" Content="Bow" Style="{StaticResource RadioButton}" Margin="5" ></RadioButton>
+            <RadioButton Grid.Row="2" Grid.Column="1" x:Name="wepXBOW" Content="Crossbow" Style="{StaticResource RadioButton}" Margin="5" ></RadioButton>
             <!--<RadioButton Grid.Row="2" Grid.Column="2" x:Name="wepGUN" Content="Pistol" Style="{StaticResource RadioButton}" Margin="5" ></RadioButton>-->
             <!--<RadioButton Grid.Row="3" Grid.Column="1" x:Name="wepCLAW" Content="Claw/Frontside Knuckle" Style="{StaticResource RadioButton}" Margin="5"></RadioButton>-->
         </Grid>
